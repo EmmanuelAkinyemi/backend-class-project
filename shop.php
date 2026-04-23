@@ -1,53 +1,50 @@
+<?php
+include("backend/config/db.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Shop | Celra Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { theme: { extend: { colors: { dark: '#0f1115', surface: '#1a1d24', accent: '#00e5ff' } } } }
-    </script>
 </head>
-<body class="bg-dark text-gray-100">
 
-    <nav class="bg-surface py-4 px-6 border-b border-gray-800 flex justify-between items-center">
-        <a href="index.php" class="text-xl font-bold">CELRA</a>
-        <a href="auth.php" class="text-sm text-gray-400 hover:text-white">Account</a>
-    </nav>
+<body class="bg-gray-900 text-white">
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-bold mb-8 border-b border-gray-800 pb-4 inline-block">Latest Arrivals</h2>
+<nav class="p-4 border-b border-gray-700">
+    <a href="index.php" class="font-bold text-xl">CELRA STORE</a>
+</nav>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            
-            <div class="bg-surface border border-gray-800 rounded-lg p-6 hover:border-accent transition duration-300">
-                <div class="h-48 bg-dark rounded mb-4 flex items-center justify-center text-gray-600">[Image Placeholder]</div>
-                <h3 class="text-lg font-semibold mb-1">Mechanical Keyboard Pro</h3>
-                <p class="text-accent font-bold text-xl mb-4">$129.99</p>
-                
-                <form action="backend/process_cart.php" method="POST">
-                    <input type="hidden" name="product_id" value="1">
-                    <button type="submit" class="w-full py-2 border border-gray-600 rounded hover:bg-gray-800 transition">
-                        Add to Cart
-                    </button>
-                </form>
-            </div>
+<div class="max-w-7xl mx-auto p-6">
 
-            <div class="bg-surface border border-gray-800 rounded-lg p-6 hover:border-accent transition duration-300">
-                <div class="h-48 bg-dark rounded mb-4 flex items-center justify-center text-gray-600">[Image Placeholder]</div>
-                <h3 class="text-lg font-semibold mb-1">Wireless Ergonomic Mouse</h3>
-                <p class="text-accent font-bold text-xl mb-4">$79.50</p>
-                
-                <form action="backend/process_cart.php" method="POST">
-                    <input type="hidden" name="product_id" value="2">
-                    <button type="submit" class="w-full py-2 border border-gray-600 rounded hover:bg-gray-800 transition">
-                        Add to Cart
-                    </button>
-                </form>
-            </div>
+<h1 class="text-3xl mb-6">Products</h1>
 
-        </div>
-    </main>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+<?php
+$result = $conn->query("SELECT * FROM products");
+
+while($row = $result->fetch_assoc()):
+?>
+
+<div class="bg-gray-800 p-4 rounded">
+    <h2 class="text-xl font-bold"><?= $row['name'] ?></h2>
+    <p class="text-gray-400"><?= $row['description'] ?></p>
+    <p class="text-green-400 text-lg">$<?= $row['price'] ?></p>
+
+    <form method="POST" action="backend/add_to_cart.php">
+        <input type="hidden" name="product_id" value="<?= $row['id'] ?>">
+        <button class="mt-3 bg-indigo-500 px-4 py-2 rounded">
+            Add to Cart
+        </button>
+    </form>
+</div>
+
+<?php endwhile; ?>
+
+</div>
+</div>
 
 </body>
 </html>
