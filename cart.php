@@ -34,7 +34,22 @@ $total = 0;
 
 <div class="max-w-4xl mx-auto p-6">
 
-<h1 class="text-3xl mb-6">Your Cart</h1>
+<!-- BACK NAVIGATION -->
+<div class="flex justify-between items-center mb-6">
+
+    <a href="shop.php"
+       class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm">
+        ← Back to Shop
+    </a>
+
+    <h1 class="text-3xl font-bold">Your Cart</h1>
+
+    <a href="checkout.php"
+       class="bg-indigo-500 hover:bg-indigo-400 px-4 py-2 rounded text-sm">
+        Checkout →
+    </a>
+
+</div>
 
 <?php while($row = $result->fetch_assoc()): 
 $total += $row['price'] * $row['quantity'];
@@ -74,11 +89,6 @@ $total += $row['price'] * $row['quantity'];
 <hr class="my-4 border-gray-700">
 
 <h2 class="text-xl">Total: $<?= $total ?></h2>
-
-<a href="checkout.php"
-   class="mt-4 inline-block bg-indigo-500 px-6 py-2 rounded">
-   Proceed to Checkout
-</a>
 
 </div>
 
