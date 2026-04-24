@@ -33,7 +33,7 @@ while($row = $result->fetch_assoc()):
     <p class="text-gray-400"><?= $row['description'] ?></p>
     <p class="text-green-400 text-lg">$<?= $row['price'] ?></p>
 
-    <form method="POST" action="backend/add_to_cart.php">
+    <form method="POST" action="backend/dashboard/user/add_to_cart.php">
         <input type="hidden" name="product_id" value="<?= $row['id'] ?>">
         <button class="mt-3 bg-indigo-500 px-4 py-2 rounded">
             Add to Cart

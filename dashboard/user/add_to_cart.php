@@ -1,15 +1,38 @@
 <?php
 session_start();
-include("../backend/config/db.php");
+include("../config/db.php");
 
-$product_id = $_POST['product_id'];
-
-if(!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+// MUST be logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../auth/index.php");
+    exit;
 }
 
-$_SESSION['cart'][] = $product_id;
+$user_id = $_SESSION['user_id'];
+$product_id = $_POST['product_id'];
 
-header("Location: ../shop.php");
-exit();
+// check if item already in cart
+$stmt = $conn->prepare("SELECT id, quantity FROM cart WHERE user_id = ? AND product_id = ?");
+$stmt->bind_param("ii", $user_id, $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+
+    $row = $result->fetch_assoc();
+    $newQty = $row['quantity'] + 1;
+
+    $update = $conn->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
+    $update->bind_param("ii", $newQty, $row['id']);
+    $update->execute();
+
+} else {
+
+    $insert = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, 1)");
+    $insert->bind_param("ii", $user_id, $product_id);
+    $insert->execute();
+}
+
+header("Location: ../cart.php");
+exit;
 ?>
